@@ -24,7 +24,8 @@ $done = true; // <------------ kalo mau lihat tabel langsung di set true aja gai
 
         <form action="" method="post">
             <div class="card p-5 shadow-sm mt-5">
-                <div class="row">
+                <h5 align="center" class="my-5">Update Topics Database</h5>
+                <div class="row mx-5">
                     <div class="col-md-6 mt-3">
                         <div>
                             <label class="required form-label">Start Date</label>
@@ -38,7 +39,7 @@ $done = true; // <------------ kalo mau lihat tabel langsung di set true aja gai
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mt-5">
                     <input type="submit" value="Learn Topics" name="submit" class="btn btn-info hover-elevate-down my-5">
                 </div>
             </div>
