@@ -30,10 +30,10 @@ if __name__ == '__main__':
     #get data
     listDate = []
     #testonly
-    startYear, startMonth, startDay = 2023, 7, 18
-    endYear, endMonth, endDay = 2023, 7, 18
-        # startYear, startMonth, startDay = sys.argv[1], sys.argv[2], sys.argv[3]
-        # endYear, endMonth, endDay = sys.argv[4], sys.argv[5], sys.argv[6]
+    # startYear, startMonth, startDay = 2023, 7, 18
+    # endYear, endMonth, endDay = 2023, 7, 18
+    startYear, startMonth, startDay = sys.argv[1], sys.argv[2], sys.argv[3]
+    endYear, endMonth, endDay = sys.argv[4], sys.argv[5], sys.argv[6]
     startDate = datetime(int(startYear), int(startMonth), int(startDay))
     endDate =   datetime(int(endYear), int(endMonth), int(endDay))
     rangeDate = []
@@ -183,22 +183,32 @@ if __name__ == '__main__':
     df["Topic LSA"]=topics
 
     # World CLoud
-    for i in range(modelLSA.num_topics):
-        df2=df[df["Topic LSA"]==(i+1)]
-        text3 = ' '.join(df2['Judul_Stemming'])
-        wordcloud = WordCloud().generate(text3)
-        # Generate plot
-        plt.title("LSA TOPIC "+str(i+1))
-        plt.imshow(wordcloud)
-        plt.axis("off")
-        plt.savefig(os.getcwd() + '/img/' + F'wc-LDA-{i+1}.jpg')
-        plt.close()
+    # for i in range(modelLSA.num_topics):
+    #     df2=df[df["Topic LSA"]==(i+1)]
+    #     text3 = ' '.join(df2['Judul_Stemming'])
+    #     wordcloud = WordCloud().generate(text3)
+    #     # Generate plot
+    #     plt.title("LSA TOPIC "+str(i+1))
+    #     plt.imshow(wordcloud)
+    #     plt.axis("off")
+    #     plt.savefig(os.getcwd() + '/img/' + F'wc-LDA-{i+1}.jpg')
+    #     plt.close()
 
     ##################################################################
     # TOPIC MODELLING LDA ############################################
     ##################################################################
-
+    coherence_values = []
+    model_list = []
+    numberTopic=range(2,11,1)
+    for num_topics in numberTopic:
+        # generate LSA model
+        model = LdaModel(corpus_tfidf, num_topics=num_topics, id2word = dictionary, alpha='auto',iterations=100)  # train model
+        model_list.append(model)
+        coherencemodel = CoherenceModel(model=model, texts=doc_clean, dictionary=dictionary, coherence='c_v')
+        coherence_values.append(coherencemodel.get_coherence())
+    bestNumberTopic=coherence_values.index(max(coherence_values))+2
     #LDA Model
+    number_of_topics=bestNumberTopic
     words=10
     tfidf = TfidfModel(doc_term_matrix)
     corpus_tfidf = tfidf[doc_term_matrix]
@@ -214,17 +224,17 @@ if __name__ == '__main__':
     df["Topic LDA"]=topics
 
     #World Cloud
-    sns.countplot(x="Topic LDA",data=df)
-    for i in range(modelLDA.num_topics):
-        df2=df[df["Topic LDA"]==(i+1)]
-        text3 = ' '.join(df2['Judul_Stemming'])
-        wordcloud = WordCloud().generate(text3)
-        # Generate plot
-        plt.title("LDA TOPIC "+str(i+1))
-        plt.imshow(wordcloud)
-        plt.axis("off")
-        plt.savefig(os.getcwd() + '/img/' + F'wc-LSA-{i+1}.jpg')
-        plt.close()
+    # sns.countplot(x="Topic LDA",data=df)
+    # for i in range(modelLDA.num_topics):
+    #     df2=df[df["Topic LDA"]==(i+1)]
+    #     text3 = ' '.join(df2['Judul_Stemming'])
+    #     wordcloud = WordCloud().generate(text3)
+    #     # Generate plot
+    #     plt.title("LDA TOPIC "+str(i+1))
+    #     plt.imshow(wordcloud)
+    #     plt.axis("off")
+    #     plt.savefig(os.getcwd() + '/img/' + F'wc-LSA-{i+1}.jpg')
+    #     plt.close()
 
     db = mysql.connector.connect(
         host='localhost',
