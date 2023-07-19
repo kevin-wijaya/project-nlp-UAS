@@ -2,7 +2,6 @@ if __name__ == '__main__':
     ##################################################################
     # LIBRARY ########################################################
     ##################################################################
-
     #utilities
     import requests, re, nltk, sys, os, numpy as np, pandas as pd, matplotlib.pyplot as plt, seaborn as sns, json
     from wordcloud import WordCloud
@@ -31,10 +30,10 @@ if __name__ == '__main__':
     #get data
     listDate = []
     #testonly
-    startYear, startMonth, startDay = 2023, 7, 18 
-    endYear, endMonth, endDay = 2023, 7, 19 
-    # startYear, startMonth, startDay = sys.argv[1], sys.argv[2], sys.argv[3]
-    # endYear, endMonth, endDay = sys.argv[4], sys.argv[5], sys.argv[6]
+    startYear, startMonth, startDay = 2023, 7, 18
+    endYear, endMonth, endDay = 2023, 7, 18
+        # startYear, startMonth, startDay = sys.argv[1], sys.argv[2], sys.argv[3]
+        # endYear, endMonth, endDay = sys.argv[4], sys.argv[5], sys.argv[6]
     startDate = datetime(int(startYear), int(startMonth), int(startDay))
     endDate =   datetime(int(endYear), int(endMonth), int(endDay))
     rangeDate = []
