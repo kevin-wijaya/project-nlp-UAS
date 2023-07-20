@@ -12,6 +12,7 @@ if __name__ == '__main__':
     #preprocessing
     from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory, StopWordRemover, ArrayDictionary
     from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+    import nltk
     from nltk.tokenize import word_tokenize
     #topic modelling
     from sklearn.feature_extraction.text import CountVectorizer
@@ -92,7 +93,7 @@ if __name__ == '__main__':
     #Stopword Removal
     def stopword(text):
         stop_factory = StopWordRemoverFactory().get_stop_words()
-        more_stopword = ['tak', 'vs', 'rp']
+        more_stopword = ['tak', 'vs', 'rp','m']
         new_stopword = StopWordRemover(ArrayDictionary(stop_factory + more_stopword))
         return new_stopword.remove(text)
     df["Judul_Stopwords"]=df["Judul"].apply(stopword)
