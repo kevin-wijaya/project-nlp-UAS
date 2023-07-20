@@ -52,9 +52,9 @@ $done = false; // <------------ kalo mau lihat tabel langsung di set true aja ga
             } else {
                 $startDate = str_replace("-", " ", $_POST['startDate']);
                 $endDate = str_replace("-", " ", $_POST['endDate']);
-                //$output = shell_exec("python main.py " . $startDate . ' ' . $endDate . " 2>&1");
+                $output = shell_exec("python main.py " . $startDate . ' ' . $endDate . " 2>&1");
 
-                $output = shell_exec("C:/Users/62822/AppData/Local/Programs/Python/Python311/python.exe main.py " . $startDate . ' ' . $endDate . " 2>&1");
+                //$output = shell_exec("C:/Users/62822/AppData/Local/Programs/Python/Python311/python.exe main.py " . $startDate . ' ' . $endDate . " 2>&1");
                 $output = explode(" ", $output);
                 if ($output[0] == 'success') {
                     $time = intval($output[1]) / 60;
