@@ -18,7 +18,6 @@ if __name__ == '__main__':
     from sklearn.feature_extraction.text import CountVectorizer
     from gensim.models.coherencemodel import CoherenceModel
     from gensim.models.ldamodel import LdaModel
-    from gensim.models import TfidfModel
     from gensim import corpora
     from gensim.models import LsiModel
     import time
@@ -75,11 +74,11 @@ if __name__ == '__main__':
     ##################################################################
 
     df=pd.DataFrame({
-        "Judul":listJudul,
+        "JudulAsli":listJudul,
         "Tanggal":listTanggal
     })
     #Case Folding
-    df["Judul"]=df["Judul"].apply(lambda x:x.lower())
+    df["Judul"]=df["JudulAsli"].apply(lambda x:x.lower())
 
     #Remove Digit - cleaning
     df["Judul"]=df["Judul"].apply(lambda x:re.sub(r"\d+", "", x))
@@ -150,11 +149,9 @@ if __name__ == '__main__':
     coherence_values = []
     model_list = []
     rangeTopic=range(2,11,1)
-    tfidf = TfidfModel(doc_term_matrix)
-    corpus_tfidf = tfidf[doc_term_matrix]
     for num_topics in rangeTopic:
         # generate LSA model
-        model = LsiModel(corpus_tfidf, num_topics=num_topics, id2word = dictionary,chunksize=100)  # train model
+        model = LsiModel(doc_term_matrix, num_topics=num_topics, id2word = dictionary,chunksize=100)  # train model
         model_list.append(model)
         coherencemodel = CoherenceModel(model=model, texts=doc_clean, dictionary=dictionary, coherence='c_v')
         coherence_values.append(coherencemodel.get_coherence())
@@ -167,9 +164,7 @@ if __name__ == '__main__':
 
     # LSA Model
     words=10
-    tfidf = TfidfModel(doc_term_matrix)
-    corpus_tfidf = tfidf[doc_term_matrix]
-    modelLSA=LsiModel(corpus_tfidf, num_topics=number_of_topics, id2word = dictionary,chunksize=100)
+    modelLSA=LsiModel(doc_term_matrix, num_topics=number_of_topics, id2word = dictionary,chunksize=100)
 
     #Testing
     topics=[]
@@ -203,7 +198,7 @@ if __name__ == '__main__':
     numberTopic=range(2,11,1)
     for num_topics in numberTopic:
         # generate LSA model
-        model = LdaModel(corpus_tfidf, num_topics=num_topics, id2word = dictionary, alpha='auto',iterations=100)  # train model
+        model = LdaModel(doc_term_matrix, num_topics=num_topics, id2word = dictionary, alpha='auto',iterations=100)  # train model
         model_list.append(model)
         coherencemodel = CoherenceModel(model=model, texts=doc_clean, dictionary=dictionary, coherence='c_v')
         coherence_values.append(coherencemodel.get_coherence())
@@ -211,9 +206,8 @@ if __name__ == '__main__':
     #LDA Model
     number_of_topics=bestNumberTopic
     words=10
-    tfidf = TfidfModel(doc_term_matrix)
-    corpus_tfidf = tfidf[doc_term_matrix]
-    modelLDA=LdaModel(corpus_tfidf, num_topics=number_of_topics, id2word = dictionary, alpha='auto',iterations=100)
+    
+    modelLDA=LdaModel(doc_term_matrix, num_topics=number_of_topics, id2word = dictionary, alpha='auto',iterations=100)
 
     #Testing
     topics=[]
@@ -271,7 +265,7 @@ if __name__ == '__main__':
     for i, item in df.iterrows():
         sql = "INSERT INTO data (id, tanggal, judul, stopwords, stemming, tokenize, lsa_id, lda_id) \
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (i+1, item['Tanggal'], item['Judul'], item['Judul_Stopwords'], item['Judul_Stemming'], 
+        cursor.execute(sql, (i+1, item['Tanggal'], item['JudulAsli'], item['Judul_Stopwords'], item['Judul_Stemming'], 
                             ', '.join(item['Judul_Tokenize']), item['Topic LSA'], item['Topic LDA']))
         db.commit()
     
